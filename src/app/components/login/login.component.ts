@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from 'src/app/_services/token-strorage.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   roles: string[] = [];
 
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
+  constructor(private authService: AuthService, private tokenStorage: TokenStorageService ,  private toastr: ToastrService) { }
 
   ngOnInit() {
     if (this.tokenStorage.getToken()) {
@@ -26,21 +27,25 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.authService.login(this.form).subscribe(
       data => {
-        this.tokenStorage.saveToken(data.accessToken);
-        this.tokenStorage.saveUser(data);
-
-        this.isLoginFailed = false;
-        this.isLoggedIn = true;
-        this.roles = this.tokenStorage.getUser().roles;
-        this.reloadPage();
+        console.log("status :" ,  data.status);
+        if(data.status == 200){
+          this.toastr.success("Connéxion réussie");
+          this.tokenStorage.saveToken(data.accessToken);
+          this.tokenStorage.saveUser(data);
+          this.isLoginFailed = false;
+          this.isLoggedIn = true;
+          this.roles = this.tokenStorage.getUser().roles;
+          this.reloadPage();
+        }else{
+          this.toastr.warning("erruer");
+        }     
       },
       err => {
-        this.errorMessage = err.error.message;
+        //this.errorMessage = err.error.message;
+        this.toastr.error(err.error.message);
         this.isLoginFailed = true;
-      }
-    );
+      });
   }
-
 
   reloadPage() {
     window.location.reload();

@@ -7,9 +7,13 @@ label {
     max-width: 400px !important;
     padding: 40px 40px;
   }
-  
+  .form-control{
+    background:transparent!important;
+    color:white!important;
+    font-size: 18px!important;
+  }
   .card {
-    background-color: #f7f7f7;
+    background-color: rgba(37, 36, 36, 0.563);
     padding: 20px 25px 30px;
     margin: 0 auto 25px;
     margin-top: 50px;
