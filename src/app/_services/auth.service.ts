@@ -19,14 +19,15 @@ export class AuthService {
     return this.http.post(AUTH_API + 'signin', {
       username: credentials.username,
       password: credentials.password
-    }, httpOptions);
+    },  { observe: 'response' });
   }
 
   register(user): Observable<any> {
     return this.http.post(AUTH_API + 'signup', {
+      id : user.id,
       username: user.username,
       email: user.email,
       password: user.password
-    }, httpOptions);
+    }, { observe: 'response' });
   }
 }
