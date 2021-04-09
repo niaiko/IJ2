@@ -13,25 +13,25 @@
       novalidate
     >
       <div class="form-group">
-        <label for="id" class="text-white">Matricule</label>
+        <label for="username">Username</label>
         <input
           type="text"
           class="form-control"
-          name="id"
-          [(ngModel)]="form.id"
+          name="username"
+          [(ngModel)]="form.username"
           required
-          #id="ngModel"
+          #username="ngModel"
         />
         <div
           class="alert alert-danger"
           role="alert"
-          *ngIf="f.submitted && id.invalid"
+          *ngIf="f.submitted && username.invalid"
         >
-          Matricule is required!
+          Username is required!
         </div>
       </div>
       <div class="form-group">
-        <label for="password" class="text-white">Password</label>
+        <label for="password">Password</label>
         <input
           type="password"
           class="form-control"
