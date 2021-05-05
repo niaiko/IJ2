@@ -1,18 +1,16 @@
-package  com.cnaps.controllers;
+package com.cnaps.controllers;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -53,44 +51,46 @@ public class AuthController {
 	JwtUtils jwtUtils;
 
 	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser( @RequestBody LoginRequest loginRequest , HttpServletResponse response) {
+	public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
-		org.springframework.security.core.Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getMatricule(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
-		
+		String jwt = jwtUtils.generateJwtToken(authentication);	
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-		 response.setStatus(HttpServletResponse.SC_ACCEPTED);
-
-//		return ResponseEntity.ok(new JwtResponse(jwt, 
-//												 userDetails.getId(), 
-//												 userDetails.getUsername(), 
-//												 userDetails.getEmail(), 
-//												 roles));
-		 
-		return new ResponseEntity<>(new JwtResponse(jwt, 
-												 userDetails.getId(), 
-												 userDetails.getUsername(), 
-												 userDetails.getEmail(), 
-												 roles), HttpStatus.OK);
+		
+	  return new ResponseEntity<>(new JwtResponse(jwt,  
+			 userDetails.getMatricule(), 
+			 userDetails.getUsername(), 
+			 userDetails.getEmail(), 
+			 roles),HttpStatus.OK);
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser( @RequestBody SignupRequest signUpRequest) {
-		if (userRepository.existsById(signUpRequest.getId())) {
+	public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
+		if (userRepository.existsByMatricule(signUpRequest.getMatricule())) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Matricule is already taken!"));
-		}	
+		}
+		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Username is already taken!"));
+		}
+
+		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Email is already in use!"));
+		}
 
 		// Create new user's account
-		User user = new User(signUpRequest.getId(),
-							 signUpRequest.getUsername(), 
+		User user = new User(signUpRequest.getMatricule(),signUpRequest.getUsername(), 
 							 signUpRequest.getEmail(),
 							 encoder.encode(signUpRequest.getPassword()));
 
@@ -127,10 +127,6 @@ public class AuthController {
 		user.setRoles(roles);
 		userRepository.save(user);
 
-//		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-		return new ResponseEntity<>(
-				new MessageResponse("User registered successfully!"),
-				HttpStatus.OK
-				);
+		  return new ResponseEntity<>(new MessageResponse("User registered successfully!"),HttpStatus.OK);
 	}
 }

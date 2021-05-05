@@ -10,10 +10,10 @@ import com.cnaps.models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByUsername(String username);
+	Optional<User> findByMatricule(String matricule);
 
-	boolean existsById(Long id);
+	boolean existsByMatricule(String matricule);
 	boolean existsByUsername(String username);
 	boolean existsByEmail(String email);
-
 
 }

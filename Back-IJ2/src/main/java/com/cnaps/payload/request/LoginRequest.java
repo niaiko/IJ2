@@ -1,15 +1,15 @@
 package com.cnaps.payload.request;
 
 public class LoginRequest {
-	private String username;
+	private String matricule;
 	private String password;
 
-	public String getUsername() {
-		return username;
+	public String getMatricule() {
+		return matricule;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setMatricule(String matricule) {
+		this.matricule = matricule;
 	}
 
 	public String getPassword() {

@@ -9,10 +9,11 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class RegisterComponent implements OnInit {
   data = {
+    id :"",
     username :"",
     email:"",
     password:"",
-    role:["admin"]
+    role:["user"]
   }
   isSuccessful = false;
   isSignUpFailed = false;

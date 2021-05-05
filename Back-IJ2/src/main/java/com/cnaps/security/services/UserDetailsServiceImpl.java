@@ -17,9 +17,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	@Transactional
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+	public UserDetails loadUserByUsername(String matricule) throws MatriculeNotFoundException {
+		User user = userRepository.findByMatricule(matricule)
+				.orElseThrow(() -> new MatriculeNotFoundException("User Not Found with matricule: " + matricule));
 
 		return UserDetailsImpl.build(user);
 	}

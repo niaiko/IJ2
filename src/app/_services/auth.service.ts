@@ -17,18 +17,17 @@ export class AuthService {
 
   login(credentials): Observable<any> {
     return this.http.post(AUTH_API + 'signin', {
-      id: credentials.id,
+      matricule: credentials.id,
       password: credentials.password
-    },  { observe: 'response' });
+    }, {observe: 'response'});
   }
 
   register(user): Observable<any> {
     return this.http.post(AUTH_API + 'signup', {
-      id : user.id,
-      username: user.username,
+      matricule : user.id,
+      username: user.username, 
       email: user.email,
-      password: user.password,
-      role : user.role
-    }, { observe: 'response' });
+      password: user.password
+    }, {observe: 'response'});
   }
 }

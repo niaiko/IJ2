@@ -1,24 +1,23 @@
 package com.cnaps.payload.request;
 
 import java.util.Set;
-
  
 public class SignupRequest {
-	private Long Id;
-    public Long getId() {
-		return Id;
-	}
-
-	public void setId(Long id) {
-		Id = id;
-	}
-
+	private String matricule;
 	private String username;
     private String email;   
     private Set<String> role;
     private String password;
+    
+    public String getMatricule() {
+  		return matricule;
+  	}
+
+  	public void setMatricule(String matricule) {
+  		this.matricule = matricule;
+  	}
   
-    public String getUsername() {
+    public String getUsername() { 
         return username;
     }
  

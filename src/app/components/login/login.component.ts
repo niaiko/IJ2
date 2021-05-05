@@ -27,13 +27,14 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.authService.login(this.form).subscribe(
       data => {
+        console.log("status :" ,  data.status);
         if(data.status == 200){
           this.toastr.success("Connéxion réussie");
           this.tokenStorage.saveToken(data.accessToken);
           this.tokenStorage.saveUser(data);
           this.isLoginFailed = false;
           this.isLoggedIn = true;
-          this.roles = this.tokenStorage.getUser().roles;
+          this.roles = data.body["roles"];
           this.reloadPage();
         }else{
           this.toastr.warning("erreur");

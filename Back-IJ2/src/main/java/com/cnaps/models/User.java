@@ -2,18 +2,7 @@ package com.cnaps.models;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
+import javax.persistence.*;
 @Entity
 @Table(	name = "users", 
 		uniqueConstraints = { 
@@ -22,7 +11,7 @@ import javax.persistence.UniqueConstraint;
 		})
 public class User {
 	@Id
-	private Long id;
+	private String matricule;
 	private String username;
 	private String email;
 	private String password;
@@ -36,20 +25,20 @@ public class User {
 	public User() {
 	}
 
-	public User(Long long1, String username, String email, String password) {
-		this.id = long1;
+	public User(String long1,String username, String email, String password) {
+		this.matricule = long1;
 		this.username = username;
 		this.email = email;
 		this.password = password;
 	}
 
-	public Long getId() {
-		return id;
+	public String getMatricule() {
+		return matricule;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+	public void setMatricule(String matricule) {
+		this.matricule = matricule;
+	}	
 
 	public String getUsername() {
 		return username;
